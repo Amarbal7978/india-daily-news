@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TN India Daily News</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f3f6;
+      color: #102d59;
+    }
+
+    header {
+      background: #102d59;
+      color: white;
+      text-align: center;
+      padding: 35px 15px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 36px;
+    }
+
+    header p {
+      font-size: 20px;
+      margin: 12px 0 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .section {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 30px;
+      margin-top: 0;
+    }
+
+    .language-box {
+      text-align: center;
+    }
+
+    #languageSelect,
+    #stateSelect {
+      width: 100%;
+      max-width: 450px;
+      padding: 14px;
+      border: 1px solid #bfcce0;
+      border-radius: 10px;
+      font-size: 17px;
+      background: white;
+      color: #102d59;
+      cursor: pointer;
+    }
+
+    .date {
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+
+    .description {
+      font-size: 20px;
+    }
+
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .category {
+      background: white;
+      border: 1px solid #bfcce0;
+      border-radius: 10px;
+      padding: 16px 24px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .category:hover {
+      background: #102d59;
+      color: white;
+    }
+.category:active {
+  transform: scale(0.95);
+}
+
+.category {
+  transition: all 0.2s ease;
+}
+
+.category:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(16, 45, 89, 0.25);
+}
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .news-card {
+      border: 1px solid #d8e0eb;
+      border-radius: 12px;
+      padding: 20px;
+      background: #fafcff;
+    }
+
+    .news-card h3 {
+      margin-top: 0;
+      font-size: 21px;
+    }
+
+    .news-card p {
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    #stateMessage {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      background: #102d59;
+      color: white;
+      padding: 22px;
+      font-size: 16px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 28px;
+      }
+
+      header p {
+        font-size: 17px;
+      }
+
+      .section {
+        padding: 22px;
+      }
+
+      h2 {
+        font-size: 25px;
+      }
+    }
+    .home-button {
+  background: white;
+  color: #102d59;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.home-button:hover {
+  background: #dce7f5;
+}
+.breaking-news {
+  background: #d62828;
+  color: white;
+  padding: 14px 20px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.breaking-news strong {
+  margin-right: 10px;
+}
+.breaking-news span {
+  display: inline-block;
+  animation: newsMove 12s linear infinite;
+}
+
+@keyframes newsMove {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+.navbar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  background: #ffffff;
+  padding: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.navbar a {
+  color: #102d59;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 8px;
+}
+
+.navbar a:hover {
+  background: #102d59;
+  color: white;
+}
+html {
+  scroll-behavior: smooth;
+}
+  </style>
+</head>
+
+<body>
+
+  <header>
+  <nav class="navbar">
+  <a href="#homeSection">Home</a>
+  <a href="#categoriesSection">Categories</a>
+  <a href="#stateSection">States</a>
+  <a href="#newsSection">Latest News</a>
+  <a href="#contactSection">Contact</a>
+</nav>
+    <div class="breaking-news">
+  <strong>BREAKING NEWS:</strong>
+  <span>India ki latest news jald yahan update hogi.</span>
+</div>
+    <button onclick="goHome()" class="home-button">
+  🏠 Home
+</button>
+    <h1 id="siteTitle"> INDIA DAILY NEWS</h1>
+    <p id="siteSubtitle">Your daily India information hub</p>
+  </header>
+
+  <main class="container">
+
+    <!-- Language Section -->
+<section class="section">
+  <h2>Search News</h2>
+
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search news here..."
+    style="width:100%; padding:15px; font-size:17px; border:1px solid #bfcce0; border-radius:10px;"
+  >
+
+  <button
+    onclick="searchNews()"
+    style="margin-top:12px; padding:12px 25px; background:#102d59; color:white; border:0; border-radius:8px; cursor:pointer;"
+  >
+    Search
+  </button>
+
+  <p id="searchMessage"></p>
+</section>
+    <section class="section language-box">
+      <h2 id="languageHeading">Choose Your Language</h2>
+
+      <select id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="or">ଓଡ଼ିଆ</option>
+        <option value="as">অসমীয়া</option>
+        <option value="bn">বাংলা</option>
+        <option value="brx">बड़ो</option>
+        <option value="doi">डोगरी</option>
+        <option value="gu">ગુજરાતી</option>
+        <option value="kn">ಕನ್ನಡ</option>
+        <option value="ks">कॉशुर / کٲشُر</option>
+        <option value="kok">कोंकणी</option>
+        <option value="mai">मैथिली</option>
+        <option value="ml">മലയാളം</option>
+        <option value="mni">মৈতৈলোন্</option>
+        <option value="mr">मराठी</option>
+        <option value="ne">नेपाली</option>
+        <option value="pa">ਪੰਜਾਬੀ</option>
+        <option value="sa">संस्कृतम्</option>
+        <option value="sat">संथाली</option>
+        <option value="sd">सिन्धी</option>
+        <option value="ta">தமிழ்</option>
+        <option value="te">తెలుగు</option>
+        <option value="ur">اُردُو</option>
+      </select>
+    </section>
+
+    <!-- Daily Updates -->
+    <section class="section" id="homeSection"></section>
+      <h2 id="updatesHeading">Today's India Updates</h2>
+      <p class="date" id="todayDate"></p>
+      <p class="description" id="updatesDescription">
+        Important information from across India.
+      </p>
+    </section>
+
+    <!-- Categories -->
+    <section class="section" id="categoriesSection"></section>
+      <h2 id="categoriesHeading">Explore Categories</h2>
+
+      <button class="category" onclick="showCategory('National')">
+  <span id="nationalText">National</span>
+</button>
+
+        <button class="category" onclick="showCategory('States')">
+          🏛️ <span id="statesText">States</span>
+        </button>
+
+        <button class="category" onclick="showCategory('Education')">
+          🎓 <span id="educationText">Education</span>
+        </button>
+
+        <button class="category" onclick="showCategory('Jobs')">
+          💼 <span id="jobsText">Jobs</span>
+        </button>
+
+        <button class="category" onclick="showCategory('Sports')">
+          🏏 <span id="sportsText">Sports</span>
+        </button>
+      </div>
+
+      <p id="categoryMessage" style="text-align:center; font-size:18px;"></p>
+    </section>
+
+    <!-- State Information -->
+    <section class="section" id="stateSection"></section>
+      <h2 id="stateHeading">Choose Your State</h2>
+
+      <div style="text-align:center;">
+        <select id="stateSelect" onchange="showState()">
+          <option value="">Select a state</option>
+          <option>Andhra Pradesh</option>
+          <option>Arunachal Pradesh</option>
+          <option>Assam</option>
+          <option>Bihar</option>
+          <option>Chhattisgarh</option>
+          <option>Goa</option>
+          <option>Gujarat</option>
+          <option>Haryana</option>
+          <option>Himachal Pradesh</option>
+          <option>Jharkhand</option>
+          <option>Karnataka</option>
+          <option>Kerala</option>
+          <option>Madhya Pradesh</option>
+          <option>Maharashtra</option>
+          <option>Manipur</option>
+          <option>Meghalaya</option>
+          <option>Mizoram</option>
+          <option>Nagaland</option>
+          <option>Odisha</option>
+          <option>Punjab</option>
+          <option>Rajasthan</option>
+          <option>Sikkim</option>
+          <option>Tamil Nadu</option>
+          <option>Telangana</option>
+          <option>Tripura</option>
+          <option>Uttar Pradesh</option>
+          <option>Uttarakhand</option>
+          <option>West Bengal</option>
+        </select>
+      </div>
+
+      <p id="stateMessage"></p>
+    </section>
+
+    <!-- Sample News -->
+    <section class="section" id="newsSection"></section>
+      <h2 id="newsHeading">Latest News</h2>
+
+      <div class="news-grid">
+        <article class="news-card">
+          <h3 id="newsTitle1">India News</h3>
+          <p id="newsText1">
+            Latest updates and important information from India.
+          </p>
+        </article>
+
+        <article class="news-card">
+          <h3 id="newsTitle2">Education News</h3>
+          <p id="newsText2">
+            Updates about schools, colleges and examinations.
+          </p>
+        </article>
+
+        <article class="news-card">
+          <h3 id="newsTitle3">Jobs News</h3>
+          <p id="newsText3">
+            Government jobs, private jobs and career updates.
+          </p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+<section class="section">
+  <h2>About India Daily News</h2>
+
+  <p style="font-size: 18px; line-height: 1.6; text-align: center;">
+    India Daily News par aapko India ki national news,
+    state news, education, jobs aur sports ki information milegi.
+  </p>
+</section>
+<section class="section" id="contactSection"></section>
+  <h2>Contact Us</h2>
+
+  <p style="text-align: center; font-size: 18px;">
+    News aur suggestions ke liye humse contact karein.
+  </p>
+
+  <form onsubmit="sendMessage(event)" style="text-align: center;">
+    <input
+      type="text"
+      id="userName"
+      placeholder="Your Name"
+      required
+      style="width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #bfcce0; border-radius: 8px; font-size: 16px;"
+    >
+
+    <input
+      type="email"
+      id="userEmail"
+      placeholder="Your Email"
+      required
+      style="width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #bfcce0; border-radius: 8px; font-size: 16px;"
+    >
+
+    <textarea
+      id="userMessage"
+      placeholder="Your Message"
+      required
+      style="width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #bfcce0; border-radius: 8px; font-size: 16px;"
+    ></textarea>
+
+    <button
+      type="submit"
+      style="background: #102d59; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;"
+    >
+      Send Message
+    </button>
+  </form>
+
+  <p id="contactMessage" style="text-align: center;"></p>
+</section>
+  <footer>
+    <p id="footerText">© 2026  India Daily News | All Rights Reserved</p>
+  </footer>
+
+  <script>
+
+    const translations = {
+      en: {
+        languageHeading: "Choose Your Language",
+        updatesHeading: "Today's India Updates",
+        updatesDescription: "Important information from across India.",
+        categoriesHeading: "Explore Categories",
+        national: "National",
+        states: "States",
+        education: "Education",
+        jobs: "Jobs",
+        sports: "Sports",
+        stateHeading: "Choose Your State",
+        statePlaceholder: "Select a state",
+        newsHeading: "Latest News",
+        newsTitle1: "India News",
+        newsText1: "Latest updates and important information from India.",
+        newsTitle2: "Education News",
+        newsText2: "Updates about schools, colleges and examinations.",
+        newsTitle3: "Jobs News",
+        newsText3: "Government jobs, private jobs and career updates.",
+        footerText: "© 2026  India Daily News | All Rights Reserved",
+        stateMessage: "State information will appear here."
+      },
+
+      hi: {
+        languageHeading: "अपनी भाषा चुनें",
+        updatesHeading: "आज की भारत की खबरें",
+        updatesDescription: "पूरे भारत की महत्वपूर्ण जानकारी।",
+        categoriesHeading: "श्रेणियाँ चुनें",
+        national: "राष्ट्रीय",
+        states: "राज्य",
+        education: "शिक्षा",
+        jobs: "नौकरियाँ",
+        sports: "खेल",
+        stateHeading: "अपना राज्य चुनें",
+        statePlaceholder: "राज्य चुनें",
+        newsHeading: "ताज़ा खबरें",
+        newsTitle1: "भारत की खबरें",
+        newsText1: "भारत से जुड़ी ताज़ा और महत्वपूर्ण जानकारी।",
+        newsTitle2: "शिक्षा की खबरें",
+        newsText2: "स्कूल, कॉलेज और परीक्षाओं से जुड़ी जानकारी।",
+        newsTitle3: "नौकरी की खबरें",
+        newsText3: "सरकारी नौकरी, प्राइवेट नौकरी और करियर अपडेट।",
+        footerText: "© 2026 TN India Daily News | सर्वाधिकार सुरक्षित",
+        stateMessage: "राज्य की जानकारी यहाँ दिखाई जाएगी।"
+      },
+
+      or: {
+        languageHeading: "ଆପଣଙ୍କ ଭାଷା ବାଛନ୍ତୁ",
+        updatesHeading: "ଆଜିର ଭାରତ ଅପଡେଟ୍",
+        updatesDescription: "ସମଗ୍ର ଭାରତର ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ ସୂଚନା।",
+        categoriesHeading: "ବିଭାଗ ବାଛନ୍ତୁ",
+        national: "ଜାତୀୟ",
+        states: "ରାଜ୍ୟ",
+        education: "ଶିକ୍ଷା",
+        jobs: "ଚାକିରି",
+        sports: "କ୍ରୀଡ଼ା",
+        stateHeading: "ଆପଣଙ୍କ ରାଜ୍ୟ ବାଛନ୍ତୁ",
+        statePlaceholder: "ରାଜ୍ୟ ବାଛନ୍ତୁ",
+        newsHeading: "ସର୍ବଶେଷ ଖବର",
+        newsTitle1: "ଭାରତ ଖବର",
+        newsText1: "ଭାରତର ସର୍ବଶେଷ ଏବଂ ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ ସୂଚନା।",
+        newsTitle2: "ଶିକ୍ଷା ଖବର",
+        newsText2: "ସ୍କୁଲ, କଲେଜ ଏବଂ ପରୀକ୍ଷା ସମ୍ବନ୍ଧୀୟ ଅପଡେଟ୍।",
+        newsTitle3: "ଚାକିରି ଖବର",
+        newsText3: "ସରକାରୀ ଚାକିରି ଏବଂ କ୍ୟାରିୟର ଅପଡେଟ୍।",
+        footerText: "© 2026 TN India Daily News | ସମସ୍ତ ଅଧିକାର ସଂରକ୍ଷିତ",
+        stateMessage: "ରାଜ୍ୟ ସମ୍ବନ୍ଧୀୟ ସୂଚନା ଏଠାରେ ଦେଖାଯିବ।"
+      }
+    };
+
+    const languageNames = {
+      en: "English",
+      hi: "हिन्दी",
+      or: "ଓଡ଼ିଆ",
+      as: "অসমীয়া",
+      bn: "বাংলা",
+      brx: "बड़ो",
+      doi: "डोगरी",
+      gu: "ગુજરાતી",
+      kn: "ಕನ್ನಡ",
+      ks: "कॉशुर",
+      kok: "कोंकणी",
+      mai: "मैथिली",
+      ml: "മലയാളം",
+      mni: "মৈতৈলোন্",
+      mr: "मराठी",
+      ne: "नेपाली",
+      pa: "ਪੰਜਾਬੀ",
+      sa: "संस्कृतम्",
+      sat: "संथाली",
+      sd: "सिन्धी",
+      ta: "தமிழ்",
+      te: "తెలుగు",
+      ur: "اُردُو"
+    };
+
+    function changeLanguage(language) {
+      const text = translations[language] || translations.en;
+
+      document.getElementById("languageHeading").textContent =
+        text.languageHeading || "Choose Your Language";
+
+      document.getElementById("updatesHeading").textContent =
+        text.updatesHeading || "Today's India Updates";
+
+      document.getElementById("updatesDescription").textContent =
+        text.updatesDescription || "Important information from across India.";
+
+      document.getElementById("categoriesHeading").textContent =
+        text.categoriesHeading || "Explore Categories";
+
+      document.getElementById("nationalText").textContent =
+        text.national || "National";
+
+      document.getElementById("statesText").textContent =
+        text.states || "States";
+
+      document.getElementById("educationText").textContent =
+        text.education || "Education";
+
+      document.getElementById("jobsText").textContent =
+        text.jobs || "Jobs";
+
+      document.getElementById("sportsText").textContent =
+        text.sports || "Sports";
+
+      document.getElementById("stateHeading").textContent =
+        text.stateHeading || "Choose Your State";
+
+      document.getElementById("newsHeading").textContent =
+        text.newsHeading || "Latest News";
+
+      document.getElementById("newsTitle1").textContent =
+        text.newsTitle1 || "India News";
+
+      document.getElementById("newsText1").textContent =
+        text.newsText1 || "Latest India news.";
+
+      document.getElementById("newsTitle2").textContent =
+        text.newsTitle2 || "Education News";
+
+      document.getElementById("newsText2").textContent =
+        text.newsText2 || "Education updates.";
+
+      document.getElementById("newsTitle3").textContent =
+        text.newsTitle3 || "Jobs News";
+
+      document.getElementById("newsText3").textContent =
+        text.newsText3 || "Jobs updates.";
+
+      document.getElementById("footerText").textContent =
+        text.footerText || "© 2026 TN India Daily News";
+
+      const stateSelect = document.getElementById("stateSelect");
+      stateSelect.options[0].textContent =
+        text.statePlaceholder || "Select a state";
+
+      document.getElementById("stateMessage").textContent =
+        text.stateMessage || "State information will appear here.";
+
+      if (!translations[language]) {
+        document.getElementById("updatesDescription").textContent =
+          "Language selected: " + languageNames[language];
+      }
+
+      document.getElementById("categoryMessage").textContent = "";
+    }
+
+   function showCategory(category) {
+  const message = document.getElementById("categoryMessage");
+
+  const categoryNews = {
+    National: "India ki latest national news yahan dikhayi jayegi.",
+    States: "State-wise news will appear here soon.",
+    Education: "Education news will appear here soon.",
+    Jobs: "Job notifications will appear here soon.",
+    Sports: "Sports news will appear here soon."
+  };
+
+  message.textContent =
+    categoryNews[category] || "News will appear here soon.";
+}
+function searchNews() {
+  const searchText = document
+    .getElementById("searchInput")
+    .value
+    .toLowerCase()
+    .trim();
+
+  const result = document.getElementById("searchMessage");
+
+  if (searchText === "") {
+    result.textContent = "Please enter a news topic.";
+    return;
+  }
+
+  if (
+    searchText.includes("india") ||
+    searchText.includes("national")
+  ) {
+    result.textContent =
+      "India ki national news yahan dikhayi jayegi.";
+  } else if (searchText.includes("education")) {
+    result.textContent =
+      "Education news yahan dikhayi jayegi.";
+  } else if (searchText.includes("job")) {
+    result.textContent =
+      "Job notifications yahan dikhayi jayengi.";
+  } else if (searchText.includes("sport")) {
+    result.textContent =
+      "Sports news yahan dikhayi jayegi.";
+  } else {
+    result.textContent =
+      "Is topic ki news abhi available nahi hai.";
+  }
+}
+    function showState() {
+      const selectedState = document.getElementById("stateSelect").value;
+      const message = document.getElementById("stateMessage");
+      const language = document.getElementById("languageSelect").value;
+
+      if (selectedState === "") {
+        message.textContent =
+          translations[language]?.stateMessage ||
+          "State information will appear here.";
+      } else if (language === "hi") {
+        message.textContent =
+          selectedState + " की जानकारी जल्द यहाँ दिखाई जाएगी।";
+      } else if (language === "or") {
+        message.textContent =
+          selectedState + " ସମ୍ବନ୍ଧୀୟ ସୂଚନା ଶୀଘ୍ର ଏଠାରେ ଦେଖାଯିବ।";
+      } else {
+        message.textContent =
+          "Information about " + selectedState + " will appear here soon.";
+      }
+    }
+
+    function setDate() {
+      const today = new Date();
+
+      document.getElementById("todayDate").textContent =
+        today.toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        });
+    }
+function goHome() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+    setDate();
+    changeLanguage("en");
+  </script>
+
+</body>
+</html>
