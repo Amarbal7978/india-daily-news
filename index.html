@@ -692,26 +692,48 @@ function searchNews() {
       "Is topic ki news abhi available nahi hai.";
   }
 }
-    function showState() {
-      const selectedState = document.getElementById("stateSelect").value;
-      const message = document.getElementById("stateMessage");
-      const language = document.getElementById("languageSelect").value;
+    async function showState() {
+  const state = document.getElementById("stateSelect").value;
+  const newsSection = document.getElementById("newsSection");
 
-      if (selectedState === "") {
-        message.textContent =
-          translations[language]?.stateMessage ||
-          "State information will appear here.";
-      } else if (language === "hi") {
-        message.textContent =
-          selectedState + " की जानकारी जल्द यहाँ दिखाई जाएगी।";
-      } else if (language === "or") {
-        message.textContent =
-          selectedState + " ସମ୍ବନ୍ଧୀୟ ସୂଚନା ଶୀଘ୍ର ଏଠାରେ ଦେଖାଯିବ।";
-      } else {
-        message.textContent =
-          "Information about " + selectedState + " will appear here soon.";
-      }
+  if (state === "") {
+    newsSection.innerHTML =
+      "<p style='text-align:center;'>Please select a state.</p>";
+    return;
+  }
+
+  newsSection.innerHTML =
+    "<p style='text-align:center;'>News loading...</p>";
+
+  try {
+    const response = await fetch(
+      "/api/news?state=" + encodeURIComponent(state)
+    );
+
+    const data = await response.json();
+
+    if (!data.articles || data.articles.length === 0) {
+      newsSection.innerHTML =
+        "<p style='text-align:center;'>Is state ki news abhi available nahi hai.</p>";
+      return;
     }
+
+    newsSection.innerHTML = "";
+
+    data.articles.slice(0, 10).forEach(article => {
+      newsSection.innerHTML += `
+        <div class="news-card">
+          <h3>${article.title}</h3>
+          <p>${article.description || ""}</p>
+          <a href="${article.url}" target="_blank">Read More</a>
+        </div>
+      `;
+    });
+  } catch (error) {
+    newsSection.innerHTML =
+      "<p style='text-align:center;'>News load nahi ho paayi.</p>";
+  }
+}
 
     function setDate() {
       const today = new Date();
