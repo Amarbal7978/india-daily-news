@@ -34,7 +34,22 @@ export default async function handler(req, res) {
       }
     }
 
-    res.status(200).json(data);
+    const savedNews = await sql`
+  SELECT
+    title,
+    description,
+    url,
+    published_at AS "publishedAt"
+  FROM news
+  WHERE state = ${state}
+  ORDER BY created_at DESC
+  LIMIT 50
+`;
+
+res.status(200).json({
+  status: "ok",
+  articles: savedNews
+});
   } catch (error) {
     console.error(error);
 
