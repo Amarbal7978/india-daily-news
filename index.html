@@ -729,6 +729,35 @@ function goHome() {
     behavior: "smooth"
   });
 }
+async function loadNews() {
+  const newsSection = document.getElementById("newsSection");
+
+  try {
+    const response = await fetch("/api/news");
+    const data = await response.json();
+
+    if (!data.articles || data.articles.length === 0) {
+      newsSection.innerHTML +=
+        "<p style='text-align:center;'>Abhi latest news available nahi hai.</p>";
+      return;
+    }
+
+    data.articles.slice(0, 10).forEach(article => {
+      newsSection.innerHTML += `
+        <div class="news-card">
+          <h3>${article.title}</h3>
+          <p>${article.description || ""}</p>
+          <a href="${article.url}" target="_blank">Read More</a>
+        </div>
+      `;
+    });
+  } catch (error) {
+    newsSection.innerHTML +=
+      "<p style='text-align:center;'>News load nahi ho paayi.</p>";
+  }
+}
+
+loadNews();
     setDate();
     changeLanguage("en");
   </script>
