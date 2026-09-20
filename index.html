@@ -694,6 +694,7 @@ function searchNews() {
 }
     async function showState() {
   const state = document.getElementById("stateSelect").value;
+  const language = document.getElementById("languageSelect").value;
   const newsSection = document.getElementById("newsSection");
 
   if (state === "") {
@@ -707,7 +708,8 @@ function searchNews() {
 
   try {
     const response = await fetch(
-      "/api/news?state=" + encodeURIComponent(state)
+      "/api/news?state=" + encodeURIComponent(state) +
+"&language=" + encodeURIComponent(language)
     );
 
     const data = await response.json();
