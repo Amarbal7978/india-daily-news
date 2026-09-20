@@ -758,6 +758,7 @@ async function loadNews() {
 }
 
 loadNews();
+setInterval(loadNews, 24 * 60 * 60 * 1000);
     setDate();
     changeLanguage("en");
   </script>
