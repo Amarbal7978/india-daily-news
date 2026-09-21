@@ -656,8 +656,7 @@ function showCategory(category) {
 
   loadNews();
 }
-  message.textContent =
-    categoryNews[category] || "News will appear here soon.";
+ 
 
 function searchNews() {
   const searchText = document
@@ -747,7 +746,7 @@ function goHome() {
   });
 }
 async function loadNews() {
-  const currentState = document.querySelector("select").value;
+  const currentState = document.getElementById("stateSelect").value;
   const newsSection = document.getElementById("newsSection");
 
   newsSection.innerHTML =
@@ -802,7 +801,7 @@ function viewNews(url) {
     </div>
   `;
 }
-loadNews();
+//loadNews();
 setInterval(loadNews, 24 * 60 * 60 * 1000);
     setDate();
     changeLanguage("en");
