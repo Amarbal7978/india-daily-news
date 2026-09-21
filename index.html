@@ -778,12 +778,15 @@ async function loadNews() {
       `;
     });
 
-  } catch (error) {
-    console.error(error);
+ } catch (error) {
+  console.error("News Error:", error);
 
-    newsSection.innerHTML =
-      "<p style='text-align:center;'>News load nahi ho paayi.</p>";
-  }
+  newsSection.innerHTML = `
+    <p style="text-align:center; color:red;">
+      Error: ${error.message}
+    </p>
+  `;
+}
 }
 function viewNews(url) {
   const newsSection = document.getElementById("newsSection");
