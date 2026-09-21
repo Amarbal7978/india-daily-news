@@ -92,8 +92,8 @@
       background: white;
       border: 1px solid #bfcce0;
       border-radius: 10px;
-      padding: 16px 24px;
-      font-size: 18px;
+      padding: 12px 14px;
+      font-size: 16px;
       cursor: pointer;
       transition: 0.2s;
     }
@@ -345,6 +345,9 @@ html {
         <button class="category" onclick="showCategory('Sports')">
           🏏 <span id="sportsText">Sports</span>
         </button>
+        <button class="category" onclick="showCategory('Events & Culture')">
+  🎭 Events & Culture
+</button>
       </div>
 
       <p id="categoryMessage" style="text-align:center; font-size:18px;"></p>
@@ -643,8 +646,9 @@ html {
 
       document.getElementById("categoryMessage").textContent = "";
     }
-
+   let selectedCategory = "";
    function showCategory(category) {
+    selectedCategory = category;
   const message = document.getElementById("categoryMessage");
 
   const categoryNews = {
@@ -652,12 +656,17 @@ html {
     States: "State-wise news will appear here soon.",
     Education: "Education news will appear here soon.",
     Jobs: "Job notifications will appear here soon.",
-    Sports: "Sports news will appear here soon."
+    Sports: "Sports news will appear here soon.",
+    "Events & Culture": "Events aur culture ki latest news yahan dikhayi jayegi."
   };
 
   message.textContent =
     categoryNews[category] || "News will appear here soon.";
+    loadNews();
 }
+  message.textContent =
+    categoryNews[category] || "News will appear here soon.";
+
 function searchNews() {
   const searchText = document
     .getElementById("searchInput")
@@ -749,7 +758,9 @@ async function loadNews() {
   const newsSection = document.getElementById("newsSection");
 
   try {
-    const response = await fetch("/api/news");
+    const response = await fetch(
+  `/api/news?category=${encodeURIComponent(selectedCategory)}`
+);
     const data = await response.json();
 
     if (!data.articles || data.articles.length === 0) {
