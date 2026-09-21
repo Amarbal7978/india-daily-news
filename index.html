@@ -748,12 +748,13 @@ function goHome() {
 }
 async function loadNews() {
   const newsSection = document.getElementById("newsSection");
-newsSection.innerHTML = "<p>News load ho rahi hai...</p>";
- 
+
+  newsSection.innerHTML =
+    "<p style='text-align:center;'>News load ho rahi hai...</p>";
 
   try {
     const response = await fetch(
-      `/api/news?category=${encodeURIComponent(selectedCategory)}`
+      `/api/news?state=${encodeURIComponent(selectedState)}&category=${encodeURIComponent(selectedCategory)}`
     );
 
     const data = await response.json();
@@ -762,7 +763,7 @@ newsSection.innerHTML = "<p>News load ho rahi hai...</p>";
 
     if (!data.articles || data.articles.length === 0) {
       newsSection.innerHTML =
-        "<p style='text-align:center;'>Is category ki news abhi available nahi hai.</p>";
+        "<p style='text-align:center;'>Is state aur category ki news abhi available nahi hai.</p>";
       return;
     }
 
@@ -771,11 +772,16 @@ newsSection.innerHTML = "<p>News load ho rahi hai...</p>";
         <div class="news-card">
           <h3>${article.title}</h3>
           <p>${article.description || ""}</p>
-          <a href="${article.url}" target="_blank">Read More</a>
+          <a href="${article.url}" target="_blank">
+            Read More
+          </a>
         </div>
       `;
     });
+
   } catch (error) {
+    console.error(error);
+
     newsSection.innerHTML =
       "<p style='text-align:center;'>News load nahi ho paayi.</p>";
   }

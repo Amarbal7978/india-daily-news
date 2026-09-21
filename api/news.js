@@ -8,14 +8,18 @@ export default async function handler(req, res) {
     const category = req.query.category || "National";
 
     const categoryQueries = {
-      National: "India national news",
-      States: `${state} India news`,
-      Education: "India education schools colleges exams",
-      Jobs: "India jobs recruitment vacancies government jobs",
-      Sports: "India sports cricket football hockey",
-      "Events & Culture":
-        'India festival cultural event exhibition concert mela celebration'
-    };
+  National: "India national news",
+
+  States: `${state} India latest news`,
+
+  Education: `${state} India education schools colleges exams`,
+
+  Jobs: `${state} India jobs recruitment vacancies government jobs`,
+
+  Sports: `${state} India sports cricket football hockey`,
+
+  "Events & Culture": `${state} India festival cultural events mela celebration`
+};
 
     const searchQuery =
       categoryQueries[category] || "India national news";
