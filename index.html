@@ -348,6 +348,13 @@ html {
         <button class="category" onclick="showCategory('Events & Culture')">
   🎭 Events & Culture
 </button>
+        <button onclick="showCurrentAffairs()">
+  📝 Current Affairs
+</button>
+
+<button onclick="showQuiz()">
+  🎯 Daily Quiz
+</button>
       </div>
 
       <p id="categoryMessage" style="text-align:center; font-size:18px;"></p>
@@ -396,6 +403,15 @@ html {
 
     <!-- Sample News -->
     <section class="section" id="newsSection"></section>
+    <section id="currentAffairsSection" style="display:none;">
+  <h2>📝 Daily Current Affairs</h2>
+  <div id="currentAffairsContent"></div>
+</section>
+
+<section id="quizSection" style="display:none;">
+  <h2>🎯 Daily Quiz</h2>
+  <div id="quizContent"></div>
+</section>
       <h2 id="newsHeading">Latest News</h2>
 
       <div class="news-grid">
@@ -771,7 +787,25 @@ function goHome() {
     behavior: "smooth"
   });
 }
+function showCurrentAffairs() {
+  document.getElementById("newsSection").style.display = "none";
+  document.getElementById("quizSection").style.display = "none";
+  document.getElementById("currentAffairsSection").style.display = "block";
 
+  document.getElementById("currentAffairsContent").innerHTML = `
+    <p>📝 Daily Current Affairs jald hi yahan dikhaye jayenge.</p>
+  `;
+}
+
+function showQuiz() {
+  document.getElementById("newsSection").style.display = "none";
+  document.getElementById("currentAffairsSection").style.display = "none";
+  document.getElementById("quizSection").style.display = "block";
+
+  document.getElementById("quizContent").innerHTML = `
+    <p>🎯 Daily Quiz jald hi yahan dikhaya jayega.</p>
+  `;
+}
 function viewNews(url) {
   window.open(url, "_blank");
 }
