@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       Education: "India education schools colleges exams",
       Jobs: "India jobs recruitment vacancies government jobs",
       Sports: "India sports cricket football hockey",
-       "Events & Culture": "India traditional festivals cultural celebrations fairs folk dance music theatre"
+      "Events & Culture": 'India (festival OR cultural OR events OR mela OR celebration)'
     };
 
     const searchQuery =
