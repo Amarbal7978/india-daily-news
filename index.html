@@ -697,32 +697,24 @@ function searchNews() {
   const language = document.getElementById("languageSelect").value;
   const newsSection = document.getElementById("newsSection");
 
-  if (state === "") {
-    newsSection.innerHTML =
-      "<p style='text-align:center;'>Please select a state.</p>";
-    return;
-  }
-
-  newsSection.innerHTML =
-    "<p style='text-align:center;'>News loading...</p>";
+  newsSection.innerHTML = "<p>News load ho rahi hai...</p>";
 
   try {
     const response = await fetch(
-      "/api/news?state=" + encodeURIComponent(state) +
-"&language=" + encodeURIComponent(language)
+      `/api/news?state=${encodeURIComponent(state)}&language=${encodeURIComponent(language)}`
     );
 
     const data = await response.json();
 
+    newsSection.innerHTML = "";
+
     if (!data.articles || data.articles.length === 0) {
       newsSection.innerHTML =
-        "<p style='text-align:center;'>Is state ki news abhi available nahi hai.</p>";
+        "<p>Is state ki news abhi available nahi hai.</p>";
       return;
     }
 
-    newsSection.innerHTML = "";
-
-    data.articles.slice(0, 10).forEach(article => {
+    data.articles.forEach(article => {
       newsSection.innerHTML += `
         <div class="news-card">
           <h3>${article.title}</h3>
@@ -733,7 +725,7 @@ function searchNews() {
     });
   } catch (error) {
     newsSection.innerHTML =
-      "<p style='text-align:center;'>News load nahi ho paayi.</p>";
+      "<p>News load nahi ho paayi.</p>";
   }
 }
 
