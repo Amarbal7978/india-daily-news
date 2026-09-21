@@ -747,15 +747,14 @@ function goHome() {
   });
 }
 async function loadNews() {
+  const currentState = document.querySelector("select").value;
   const newsSection = document.getElementById("newsSection");
 
   newsSection.innerHTML =
     "<p style='text-align:center;'>News load ho rahi hai...</p>";
 
   try {
-    const response = await fetch(
-      `/api/news?state=${encodeURIComponent(selectedState)}&category=${encodeURIComponent(selectedCategory)}`
-    );
+    `/api/news?state=${encodeURIComponent(currentState)}&category=${encodeURIComponent(selectedCategory)}`
 
     const data = await response.json();
 

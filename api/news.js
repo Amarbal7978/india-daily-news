@@ -8,23 +8,17 @@ export default async function handler(req, res) {
     const category = req.query.category || "National";
 
     const categoryQueries = {
-  National: "India national news",
-
-  States: `${state} India latest news`,
-
-  Education: `${state} India education schools colleges exams`,
-
-  Jobs: `${state} India jobs recruitment vacancies government jobs`,
-
-  Sports: `${state} India sports cricket football hockey`,
-
-  "Events & Culture": `${state} India festival cultural events mela celebration`
-};
+      National: `${state} India national news`,
+      States: `${state} India latest news`,
+      Education: `${state} India education schools colleges exams`,
+      Jobs: `${state} India jobs recruitment vacancies government jobs`,
+      Sports: `${state} India sports cricket football hockey`,
+      "Events & Culture": `${state} India festival culture events mela celebration`
+    };
 
     const searchQuery =
-      categoryQueries[category] || "India national news";
+      categoryQueries[category] || `${state} India latest news`;
 
-    // नई news API से लाना
     const response = await fetch(
       `https://newsapi.org/v2/everything?q=${encodeURIComponent(
         searchQuery
@@ -33,9 +27,17 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // News को database में save करना
+    if (!response.ok) {
+      return res.status(500).json({
+        error: data.message || "NewsAPI mein problem hai."
+      });
+    }
+
+    // Nayi news database mein save karo
     if (data.articles) {
       for (const article of data.articles) {
+        if (!article.url || !article.title) continue;
+
         await sql`
           INSERT INTO news
             (title, description, url, state, published_at, created_at, category)
@@ -45,7 +47,7 @@ export default async function handler(req, res) {
               ${article.description || ""},
               ${article.url},
               ${state},
-              ${article.publishedAt},
+              ${article.publishedAt || null},
               NOW(),
               ${category}
             )
@@ -54,7 +56,7 @@ export default async function handler(req, res) {
       }
     }
 
-    // Database से पुरानी और नई news निकालना
+    // Sirf selected state + selected category ki news lao
     const savedNews = await sql`
       SELECT
         id,
@@ -66,20 +68,21 @@ export default async function handler(req, res) {
         created_at,
         category
       FROM news
-      WHERE category = ${category}
+      WHERE state = ${state}
+        AND category = ${category}
       ORDER BY created_at DESC
       LIMIT 50
     `;
 
-    res.status(200).json({
+    return res.status(200).json({
       articles: savedNews
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("API Error:", error);
 
-    res.status(500).json({
-      error: "News fetch aur save karne mein problem hui."
+    return res.status(500).json({
+      error: "News fetch ya database mein problem hui."
     });
   }
 }
