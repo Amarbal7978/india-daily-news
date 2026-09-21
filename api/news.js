@@ -13,50 +13,48 @@ export default async function handler(req, res) {
       Education: `${state} India education schools colleges exams`,
       Jobs: `${state} India jobs recruitment vacancies government jobs`,
       Sports: `${state} India sports cricket football hockey`,
-      "Events & Culture": `${state} India festival culture events mela celebration`
+      "Events & Culture": `${state} India festivals culture mela events`
     };
 
     const searchQuery =
       categoryQueries[category] || `${state} India latest news`;
 
-    const response = await fetch(
+    const apiResponse = await fetch(
       `https://newsapi.org/v2/everything?q=${encodeURIComponent(
         searchQuery
       )}&language=en&sortBy=publishedAt&pageSize=10&apiKey=${process.env.NEWS_API_KEY}`
     );
 
-    const data = await response.json();
+    const apiData = await apiResponse.json();
 
-    if (!response.ok) {
+    if (!apiResponse.ok) {
       return res.status(500).json({
-        error: data.message || "NewsAPI mein problem hai."
+        error: apiData.message || "NewsAPI error"
       });
     }
 
-    // Nayi news database mein save karo
-    if (data.articles) {
-      for (const article of data.articles) {
+    if (apiData.articles) {
+      for (const article of apiData.articles) {
         if (!article.url || !article.title) continue;
 
         await sql`
           INSERT INTO news
-            (title, description, url, state, published_at, created_at, category)
+          (title, description, url, state, published_at, created_at, category)
           VALUES
-            (
-              ${article.title},
-              ${article.description || ""},
-              ${article.url},
-              ${state},
-              ${article.publishedAt || null},
-              NOW(),
-              ${category}
-            )
+          (
+            ${article.title},
+            ${article.description || ""},
+            ${article.url},
+            ${state},
+            ${article.publishedAt || null},
+            NOW(),
+            ${category}
+          )
           ON CONFLICT (url) DO NOTHING
         `;
       }
     }
 
-    // Sirf selected state + selected category ki news lao
     const savedNews = await sql`
       SELECT
         id,
@@ -82,7 +80,7 @@ export default async function handler(req, res) {
     console.error("API Error:", error);
 
     return res.status(500).json({
-      error: "News fetch ya database mein problem hui."
+      error: error.message || "Server mein problem hui."
     });
   }
 }
