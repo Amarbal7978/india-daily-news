@@ -1,33 +1,28 @@
-import { neon } from "@neondatabase/serverless";
-
-const sql = neon(process.env.DATABASE_URL);
-
 export default async function handler(req, res) {
   try {
     const state = req.query.state || "Odisha";
     const language = req.query.language || "English";
-    const category = req.query.category || "";
-const languageCodes = {
-  English: "en",
-  Hindi: "hi",
-  Odia: "en"
-};
+    const category = req.query.category || "National";
 
-const apiLanguage = languageCodes[language] || "en";
+    const languageCodes = {
+      English: "en",
+      Hindi: "hi",
+      Odia: "en"
+    };
 
+    const apiLanguage = languageCodes[language] || "en";
 
-const categoryQueries = {
-  National: "India national news",
-  States: `${state} India news`,
-  Education: "India education news",
-  Jobs: "India jobs recruitment",
-  Sports: "India sports",
-  "Events & Culture": "India events culture festival"
-};
+    const categoryQueries = {
+      National: "India national news",
+      States: `${state} India news`,
+      Education: "India education schools colleges exams",
+      Jobs: "India jobs recruitment vacancies government jobs",
+      Sports: "India sports cricket football hockey",
+      "Events & Culture": "India festivals events culture entertainment"
+    };
 
-const searchQuery =
-  categoryQueries[category] || `${state} India news`;
-
+    const searchQuery =
+      categoryQueries[category] || "India national news";
 
     const response = await fetch(
       `https://newsapi.org/v2/everything?q=${encodeURIComponent(
@@ -37,47 +32,10 @@ const searchQuery =
 
     const data = await response.json();
 
-    if (data.articles) {
-      for (const article of data.articles) {
-        if (article.url) {
-          await sql`
-            INSERT INTO news
-              (title, description, url, state, published_at)
-            VALUES
-              (
-                ${article.title},
-                ${article.description || ""},
-                ${article.url},
-                ${state},
-                ${article.publishedAt || null}
-              )
-            ON CONFLICT (url) DO NOTHING
-          `;
-        }
-      }
-    }
-
-    const savedNews = await sql`
-  SELECT
-    title,
-    description,
-    url,
-    published_at AS "publishedAt"
-  FROM news
-  WHERE state = ${state}
-  ORDER BY created_at DESC
-  LIMIT 50
-`;
-
-res.status(200).json({
-  status: "ok",
-  articles: savedNews
-});
+    res.status(200).json(data);
   } catch (error) {
-    console.error(error);
-
     res.status(500).json({
-      error: "News save karne mein problem hui."
+      error: "News fetch karne mein problem hui."
     });
   }
 }
