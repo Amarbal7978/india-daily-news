@@ -754,18 +754,19 @@ async function loadNews() {
     "<p style='text-align:center;'>News load ho rahi hai...</p>";
 
   try {
+  const response = await fetch(
     `/api/news?state=${encodeURIComponent(currentState)}&category=${encodeURIComponent(selectedCategory)}`
+  );
 
-    const data = await response.json();
+  const data = await response.json();
 
-    newsSection.innerHTML = "";
+  newsSection.innerHTML = "";
 
-    if (!data.articles || data.articles.length === 0) {
-      newsSection.innerHTML =
-        "<p style='text-align:center;'>Is state aur category ki news abhi available nahi hai.</p>";
-      return;
-    }
-
+  if (!data.articles || data.articles.length === 0) {
+    newsSection.innerHTML =
+      "<p style='text-align:center;'>Is state aur category ki news abhi available nahi hai.</p>";
+    return;
+  }
     data.articles.slice(0, 10).forEach(article => {
       newsSection.innerHTML += `
         <div class="news-card">
