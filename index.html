@@ -401,36 +401,38 @@ html {
       <p id="stateMessage"></p>
     </section>
 
-    <!-- Sample News -->
-    <section class="section" id="newsSection"></section>
-    
-      <h2 id="newsHeading">Latest News</h2>
+    <!-- Useful Information -->
+    <section class="section" id="newsSection">
+      <h2 id="newsHeading">Useful Information</h2>
 
       <div class="news-grid">
         <article class="news-card">
-          <h3 id="newsTitle1">India News</h3>
+          <h3 id="newsTitle1">🏛️ Government Schemes & Important Updates</h3>
           <p id="newsText1">
-            Latest updates and important information from India.
+            Scholarship updates, central and state government schemes,
+            student benefits, farmer schemes and important government announcements.
           </p>
         </article>
 
         <article class="news-card">
-          <h3 id="newsTitle2">Education News</h3>
+          <h3 id="newsTitle2">📚 Student Corner</h3>
           <p id="newsText2">
-            Updates about schools, colleges and examinations.
+            Important exam dates, admit cards, results, scholarships,
+            daily GK and exam preparation updates.
           </p>
         </article>
 
         <article class="news-card">
-          <h3 id="newsTitle3">Jobs News</h3>
+          <h3 id="newsTitle3">📢 Notifications & Alerts</h3>
           <p id="newsText3">
-            Government jobs, private jobs and career updates.
+            Recruitment notifications, application deadlines,
+            scholarship last dates and important public notices.
           </p>
         </article>
       </div>
     </section>
 
-  </main>
+    </main>
 <section class="section">
   <h2>About India Daily News</h2>
 
@@ -778,25 +780,6 @@ function goHome() {
     top: 0,
     behavior: "smooth"
   });
-}
-function showCurrentAffairs() {
-  document.getElementById("newsSection").style.display = "none";
-  document.getElementById("quizSection").style.display = "none";
-  document.getElementById("currentAffairsSection").style.display = "block";
-
-  document.getElementById("currentAffairsContent").innerHTML = `
-    <p>📝 Daily Current Affairs jald hi yahan dikhaye jayenge.</p>
-  `;
-}
-
-function showQuiz() {
-  document.getElementById("newsSection").style.display = "none";
-  document.getElementById("currentAffairsSection").style.display = "none";
-  document.getElementById("quizSection").style.display = "block";
-
-  document.getElementById("quizContent").innerHTML = `
-    <p>🎯 Daily Quiz jald hi yahan dikhaya jayega.</p>
-  `;
 }
 function viewNews(url) {
   window.open(url, "_blank");
