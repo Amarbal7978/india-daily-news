@@ -647,22 +647,14 @@ html {
       document.getElementById("categoryMessage").textContent = "";
     }
    let selectedCategory = "";
-   function showCategory(category) {
-    selectedCategory = category;
+function showCategory(category) {
+  selectedCategory = category;
+
   const message = document.getElementById("categoryMessage");
 
-  const categoryNews = {
-    National: "India ki latest national news yahan dikhayi jayegi.",
-    States: "State-wise news will appear here soon.",
-    Education: "Education news will appear here soon.",
-    Jobs: "Job notifications will appear here soon.",
-    Sports: "Sports news will appear here soon.",
-    "Events & Culture": "Events aur culture ki latest news yahan dikhayi jayegi."
-  };
+  message.textContent = category + " ki latest news load ho rahi hai...";
 
-  message.textContent =
-    categoryNews[category] || "News will appear here soon.";
-    loadNews();
+  loadNews();
 }
   message.textContent =
     categoryNews[category] || "News will appear here soon.";
@@ -757,15 +749,20 @@ function goHome() {
 async function loadNews() {
   const newsSection = document.getElementById("newsSection");
 
+  newsSection.innerHTML = "<p>News load ho rahi hai...</p>";
+
   try {
     const response = await fetch(
-  `/api/news?category=${encodeURIComponent(selectedCategory)}`
-);
+      `/api/news?category=${encodeURIComponent(selectedCategory)}`
+    );
+
     const data = await response.json();
 
+    newsSection.innerHTML = "";
+
     if (!data.articles || data.articles.length === 0) {
-      newsSection.innerHTML +=
-        "<p style='text-align:center;'>Abhi latest news available nahi hai.</p>";
+      newsSection.innerHTML =
+        "<p style='text-align:center;'>Is category ki news abhi available nahi hai.</p>";
       return;
     }
 
@@ -774,12 +771,12 @@ async function loadNews() {
         <div class="news-card">
           <h3>${article.title}</h3>
           <p>${article.description || ""}</p>
-        <a href="${article.url}" target="_blank">Read More</a>
+          <a href="${article.url}" target="_blank">Read More</a>
         </div>
       `;
     });
   } catch (error) {
-    newsSection.innerHTML +=
+    newsSection.innerHTML =
       "<p style='text-align:center;'>News load nahi ho paayi.</p>";
   }
 }
