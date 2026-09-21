@@ -14,16 +14,13 @@ const languageCodes = {
 };
 
 const apiLanguage = languageCodes[language] || "en";
-const categoryQueries = {
-  National: "India",
-  States: `${state} India`,
-  Education: "India education",
-  Jobs: "India jobs",
-  Sports: "India sports",
-  "Events & Culture": "India events culture festivals"
-};
 
-const searchQuery = categoryQueries[category] || `${state} India`;
+
+const searchQuery = category
+  ? `${state} India ${category}`
+  : `${state} India`;
+
+
     const response = await fetch(
       `https://newsapi.org/v2/everything?q=${encodeURIComponent(
         searchQuery
