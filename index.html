@@ -348,11 +348,11 @@ html {
         <button class="category" onclick="showCategory('Events & Culture')">
   🎭 Events & Culture
 </button>
-        <button onclick="showCurrentAffairs()">
+        <button onclick="window.location.href='current-affairs.html'">
   📝 Current Affairs
 </button>
 
-<button onclick="showQuiz()">
+<button onclick="window.location.href='daily-quiz.html'">
   🎯 Daily Quiz
 </button>
       </div>
@@ -403,15 +403,7 @@ html {
 
     <!-- Sample News -->
     <section class="section" id="newsSection"></section>
-    <section id="currentAffairsSection" style="display:none;">
-  <h2>📝 Daily Current Affairs</h2>
-  <div id="currentAffairsContent"></div>
-</section>
-
-<section id="quizSection" style="display:none;">
-  <h2>🎯 Daily Quiz</h2>
-  <div id="quizContent"></div>
-</section>
+    
       <h2 id="newsHeading">Latest News</h2>
 
       <div class="news-grid">
