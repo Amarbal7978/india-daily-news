@@ -16,9 +16,17 @@ const languageCodes = {
 const apiLanguage = languageCodes[language] || "en";
 
 
-const searchQuery = category
-  ? `${state} India ${category}`
-  : `${state} India`;
+const categoryQueries = {
+  National: "India national news",
+  States: `${state} India news`,
+  Education: "India education news",
+  Jobs: "India jobs recruitment",
+  Sports: "India sports",
+  "Events & Culture": "India events culture festival"
+};
+
+const searchQuery =
+  categoryQueries[category] || `${state} India news`;
 
 
     const response = await fetch(
