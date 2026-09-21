@@ -18,7 +18,10 @@ export default async function handler(req, res) {
 
     const searchQuery =
       categoryQueries[category] || `${state} India latest news`;
-     const finalQuery = `${state} India ${category === "Events & Culture" ? "festival culture events" : category}`;
+     const finalQuery =
+  category === "Events & Culture"
+    ? `"${state}" India festival culture events`
+    : `"${state}" India ${category}`;
     const apiResponse = await fetch(
       `https://newsapi.org/v2/everything?q=${encodeURIComponent(finalQuery)
       }&language=en&sortBy=publishedAt&pageSize=10&apiKey=${process.env.NEWS_API_KEY}`
@@ -49,7 +52,7 @@ export default async function handler(req, res) {
             NOW(),
             ${category}
           )
-          ON CONFLICT (url) DO NOTHING
+          ON CONFLICT (state, category, url) DO NOTHING
         `;
       }
     }

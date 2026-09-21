@@ -646,17 +646,17 @@ html {
 
       document.getElementById("categoryMessage").textContent = "";
     }
-   let selectedCategory = "";
+let selectedCategory = "National";
+
 function showCategory(category) {
   selectedCategory = category;
 
   const message = document.getElementById("categoryMessage");
-
-  message.textContent = category + " ki latest news load ho rahi hai...";
+  message.textContent =
+    category + " ki latest news load ho rahi hai...";
 
   loadNews();
 }
- 
 
 function searchNews() {
   const searchText = document
@@ -672,139 +672,112 @@ function searchNews() {
     return;
   }
 
-  if (
-    searchText.includes("india") ||
-    searchText.includes("national")
-  ) {
-    result.textContent =
-      "India ki national news yahan dikhayi jayegi.";
-  } else if (searchText.includes("education")) {
-    result.textContent =
-      "Education news yahan dikhayi jayegi.";
-  } else if (searchText.includes("job")) {
-    result.textContent =
-      "Job notifications yahan dikhayi jayengi.";
-  } else if (searchText.includes("sport")) {
-    result.textContent =
-      "Sports news yahan dikhayi jayegi.";
-  } else {
-    result.textContent =
-      "Is topic ki news abhi available nahi hai.";
-  }
+  result.textContent =
+    "Search feature jald aur behtar banaya jayega.";
 }
-    async function showState() {
+
+async function showState() {
   const state = document.getElementById("stateSelect").value;
-  const language = document.getElementById("languageSelect").value;
+
+  if (!state) {
+    return;
+  }
+
+  document.getElementById("stateMessage").textContent =
+    state + " ki news load ho rahi hai...";
+
+  await loadNews();
+}
+
+async function loadNews() {
+  const state = document.getElementById("stateSelect").value;
   const newsSection = document.getElementById("newsSection");
 
-  newsSection.innerHTML = "<p>News load ho rahi hai...</p>";
+  if (!state) {
+    newsSection.innerHTML =
+      "<p style='text-align:center;'>Pehle apna state select karein.</p>";
+    return;
+  }
+
+  newsSection.innerHTML =
+    "<p style='text-align:center;'>News load ho rahi hai...</p>";
 
   try {
-    const response = await fetch(
-      `/api/news?state=${encodeURIComponent(state)}&language=${encodeURIComponent(language)}`
-    );
+    const url =
+      `/api/news?state=${encodeURIComponent(state)}&category=${encodeURIComponent(selectedCategory)}`;
 
+    const response = await fetch(url);
     const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Server error");
+    }
 
     newsSection.innerHTML = "";
 
     if (!data.articles || data.articles.length === 0) {
-      newsSection.innerHTML =
-        "<p>Is state ki news abhi available nahi hai.</p>";
+      newsSection.innerHTML = `
+        <p style="text-align:center;">
+          ${state} ki ${selectedCategory} news abhi available nahi hai.
+        </p>
+      `;
       return;
     }
 
-    data.articles.forEach(article => {
+    data.articles.slice(0, 10).forEach(article => {
       newsSection.innerHTML += `
-        <div class="news-card">
-          <h3>${article.title}</h3>
-          <p>${article.description || ""}</p>
-        <a href="${article.url}" target="_blank">Read More</a>
-        </div>
+        <article class="news-card">
+          <h3>${article.title || "News title available nahi hai"}</h3>
+          <p>${article.description || "Description available nahi hai."}</p>
+          ${
+            article.url
+              ? `<a href="${article.url}" target="_blank" rel="noopener noreferrer">
+                   Read More
+                 </a>`
+              : ""
+          }
+        </article>
       `;
     });
+
+    document.getElementById("stateMessage").textContent =
+      `${state} ki ${selectedCategory} news dikhayi ja rahi hai.`;
+
   } catch (error) {
-    newsSection.innerHTML =
-      "<p>News load nahi ho paayi.</p>";
+    console.error("News Error:", error);
+
+    newsSection.innerHTML = `
+      <p style="text-align:center; color:red;">
+        Error: ${error.message}
+      </p>
+    `;
   }
 }
 
-    function setDate() {
-      const today = new Date();
+function setDate() {
+  const today = new Date();
 
-      document.getElementById("todayDate").textContent =
-        today.toLocaleDateString("en-IN", {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        });
-    }
+  document.getElementById("todayDate").textContent =
+    today.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+}
+
 function goHome() {
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
 }
-async function loadNews() {
-  const currentState = document.getElementById("stateSelect").value;
-  const newsSection = document.getElementById("newsSection");
 
-  newsSection.innerHTML =
-    "<p style='text-align:center;'>News load ho rahi hai...</p>";
-
-  try {
-  const response = await fetch(
-    `/api/news?state=${encodeURIComponent(currentState)}&category=${encodeURIComponent(selectedCategory)}`
-  );
-
-  const data = await response.json();
-
-  newsSection.innerHTML = "";
-
-  if (!data.articles || data.articles.length === 0) {
-    newsSection.innerHTML =
-      "<p style='text-align:center;'>Is state aur category ki news abhi available nahi hai.</p>";
-    return;
-  }
-    data.articles.slice(0, 10).forEach(article => {
-      newsSection.innerHTML += `
-        <div class="news-card">
-          <h3>${article.title}</h3>
-          <p>${article.description || ""}</p>
-          <a href="${article.url}" target="_blank">
-            Read More
-          </a>
-        </div>
-      `;
-    });
-
- } catch (error) {
-  console.error("News Error:", error);
-
-  newsSection.innerHTML = `
-    <p style="text-align:center; color:red;">
-      Error: ${error.message}
-    </p>
-  `;
-}
-}
 function viewNews(url) {
-  const newsSection = document.getElementById("newsSection");
-
-  newsSection.innerHTML = `
-    <div class="news-card">
-      <h2>News Details</h2>
-      <p>Is news ka short description upar diya gaya hai.</p>
-      <p>News ka detailed content jald yahan available hoga.</p>
-      <br><br>
-      <button onclick="location.reload()">Back to News</button>
-    </div>
-  `;
+  window.open(url, "_blank");
 }
-//loadNews();
-setInterval(loadNews, 24 * 60 * 60 * 1000);
-    setDate();
-    changeLanguage("en");
+
+setDate();
+changeLanguage("en");
   </script>
 
 </body>
