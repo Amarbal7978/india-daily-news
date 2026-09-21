@@ -18,11 +18,10 @@ export default async function handler(req, res) {
 
     const searchQuery =
       categoryQueries[category] || `${state} India latest news`;
-
+     const finalQuery = `${state} India ${category === "Events & Culture" ? "festival culture events" : category}`;
     const apiResponse = await fetch(
-      `https://newsapi.org/v2/everything?q=${encodeURIComponent(
-        searchQuery
-      )}&language=en&sortBy=publishedAt&pageSize=10&apiKey=${process.env.NEWS_API_KEY}`
+      `https://newsapi.org/v2/everything?q=${encodeURIComponent(finalQuery)
+      }&language=en&sortBy=publishedAt&pageSize=10&apiKey=${process.env.NEWS_API_KEY}`
     );
 
     const apiData = await apiResponse.json();
