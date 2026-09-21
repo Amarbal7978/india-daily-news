@@ -763,7 +763,9 @@ async function loadNews() {
         <div class="news-card">
           <h3>${article.title}</h3>
           <p>${article.description || ""}</p>
-          <a href="${article.url}" target="_blank">Read More</a>
+          <button onclick="viewNews('${article.url}')">
+  Read More
+</button>
         </div>
       `;
     });
@@ -772,7 +774,19 @@ async function loadNews() {
       "<p style='text-align:center;'>News load nahi ho paayi.</p>";
   }
 }
+function viewNews(url) {
+  const newsSection = document.getElementById("newsSection");
 
+  newsSection.innerHTML = `
+    <div class="news-card">
+      <h2>News Details</h2>
+      <p>Is news ka short description upar diya gaya hai.</p>
+      <a href="${url}" target="_blank">Open Original News</a>
+      <br><br>
+      <button onclick="location.reload()">Back to News</button>
+    </div>
+  `;
+}
 loadNews();
 setInterval(loadNews, 24 * 60 * 60 * 1000);
     setDate();
