@@ -698,39 +698,97 @@
       });
 
 
-    async function submitLocalNews() {
+async function submitLocalNews() {
+  const declaration =
+    document.getElementById("declaration").checked;
 
-      const declaration =
-        document.getElementById("declaration").checked;
+  if (!declaration) {
+    alert("Please accept the declaration.");
+    return;
+  }
 
-      if (!declaration) {
+  const name =
+    document.getElementById("fullName").value.trim();
 
-        alert("Please accept the declaration.");
+  const village =
+    document.getElementById("village").value.trim();
 
-        return;
-      }
+  const block =
+    document.getElementById("block").value.trim();
 
-      const file =
-        document.getElementById("mediaFile").files[0];
+  const district =
+    document.getElementById("district").value.trim();
 
-      if (!file) {
+  const state =
+    document.getElementById("state").value.trim();
 
-        alert("Please upload a photo or video as evidence.");
+  const title =
+    document.getElementById("newsTitle").value.trim();
 
-        return;
-      }
+  const description =
+    document.getElementById("newsDescription").value.trim();
 
-      /*
-        Important:
-        This frontend does NOT claim that the media is
-        definitely real. Actual AI/media verification
-        must happen on the server before publication.
-      */
+  const file =
+    document.getElementById("mediaFile").files[0];
 
-      document.getElementById("submitStatus").innerText =
-        "🟡 Submission received for verification. It will NOT be published automatically.";
+  if (!name || !village || !block || !district || !state) {
+    alert("Please fill all required personal and location details.");
+    return;
+  }
 
+  if (!title || !description) {
+    alert("Please fill the news title and description.");
+    return;
+  }
+
+  if (!file) {
+    alert("Please upload photo/video evidence.");
+    return;
+  }
+
+  const location =
+    `${village}, ${block}, ${district}, ${state}`;
+
+  const news =
+    `${title}\n\n${description}`;
+
+  const submitStatus =
+    document.getElementById("submitStatus");
+
+  submitStatus.innerText = "📤 Sending submission...";
+
+  try {
+    const response = await fetch("/api/local-news", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        location,
+        news
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.message || "Submission failed"
+      );
     }
+
+    submitStatus.innerText =
+      "🟡 Submitted successfully. Your news is PENDING verification and will NOT be published automatically.";
+
+  } catch (error) {
+
+    console.error("Submission error:", error);
+
+    submitStatus.innerText =
+      "❌ Submission failed. Please try again.";
+  }
+}
 
   </script>
 

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Dashboard - India Daily News</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #123b70;
+    }
+
+    header {
+      background: #123b70;
+      color: white;
+      padding: 20px 30px;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 1250px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 22px;
+      border-radius: 15px;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    }
+
+    .stat-card h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      color: #64748b;
+    }
+
+    .stat-card strong {
+      font-size: 30px;
+    }
+
+    .news-card {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    }
+
+    .news-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .status {
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .pending {
+      background: #fff7ed;
+      color: #c2410c;
+    }
+
+    .verified {
+      background: #ecfdf5;
+      color: #15803d;
+    }
+
+    .rejected {
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .detail {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 9px;
+    }
+
+    .evidence {
+      padding: 15px;
+      background: #eff6ff;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 11px 17px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .verify-btn {
+      background: #16803c;
+      color: white;
+    }
+
+    .reject-btn {
+      background: #dc2626;
+      color: white;
+    }
+
+    .review-btn {
+      background: #123b70;
+      color: white;
+    }
+
+    .notice {
+      background: #fff7ed;
+      border-left: 5px solid #f97316;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+    }
+
+    @media (max-width: 800px) {
+
+      .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .details {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🛡️ India Daily News — Admin Dashboard</h1>
+    <p>Local News Verification Center</p>
+  </header>
+
+  <div class="container">
+
+    <div class="notice">
+      ⚠️ <strong>Important:</strong>
+      User submitted news must remain pending until verification is completed.
+      Do not publish unverified reports.
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="dashboard-grid">
+
+      <div class="stat-card">
+        <h3>🟡 Pending</h3>
+        <strong id="pendingCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <h3>🟢 Verified</h3>
+        <strong id="verifiedCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <h3>🔴 Rejected</h3>
+        <strong id="rejectedCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <h3>📊 Total Reports</h3>
+        <strong id="totalCount">0</strong>
+      </div>
+
+    </div>
+
+
+    <!-- Pending News -->
+
+    <div class="news-card">
+
+      <div class="news-header">
+
+        <div>
+          <h2>📰 Local News Submissions</h2>
+          <p>Review every report before publication.</p>
+        </div>
+
+        <span class="status pending">
+          PENDING REVIEW
+        </span>
+
+      </div>
+
+      <h3>
+        Sample Local News Submission
+      </h3>
+
+      <div class="details">
+
+        <div class="detail">
+          👤 <strong>Submitter:</strong>
+          Demo User
+        </div>
+
+        <div class="detail">
+          📱 <strong>Mobile:</strong>
+          Verified
+        </div>
+
+        <div class="detail">
+          📍 <strong>Location:</strong>
+          Village / District / State
+        </div>
+
+        <div class="detail">
+          🕐 <strong>Event:</strong>
+          Date & Time
+        </div>
+
+      </div>
+
+      <div class="evidence">
+
+        <strong>📷 Evidence</strong>
+
+        <p>
+          Photo / video submitted by the user.
+        </p>
+
+        <p>
+          🤖 AI/media authenticity check:
+          <strong>Pending</strong>
+        </p>
+
+      </div>
+
+      <div class="actions">
+
+        <button class="review-btn">
+          🔍 Review Evidence
+        </button>
+
+        <button class="verify-btn">
+          🟢 Verify & Publish
+        </button>
+
+        <button class="reject-btn">
+          🔴 Reject
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- Verification Rules -->
+
+    <div class="news-card">
+
+      <h2>🔐 Verification Rules</h2>
+
+      <ul>
+        <li>Mobile verification required.</li>
+        <li>Location details must be provided.</li>
+        <li>Evidence should be reviewed.</li>
+        <li>Duplicate reports should be checked.</li>
+        <li>AI-generated/manipulated media should be flagged.</li>
+        <li>Sensitive reports require additional verification.</li>
+        <li>Only verified reports can be published.</li>
+      </ul>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    async function loadLocalNews() {
+  try {
+    const response = await fetch("../api/local-news");
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.message || "Could not load submissions");
+    }
+
+    const submissions = data.submissions || [];
+
+    document.getElementById("pendingCount").innerText =
+      submissions.filter(item => item.status === "pending").length;
+
+    document.getElementById("verifiedCount").innerText =
+      submissions.filter(item => item.status === "verified").length;
+
+    document.getElementById("rejectedCount").innerText =
+      submissions.filter(item => item.status === "rejected").length;
+
+    document.getElementById("totalCount").innerText =
+      submissions.length;
+
+    console.log("Local News:", submissions);
+
+  } catch (error) {
+    console.error("Dashboard error:", error);
+  }
+}
+
+loadLocalNews();
+</script>
+</body>
+</html>
