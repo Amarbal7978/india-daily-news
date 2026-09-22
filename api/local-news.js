@@ -1,3 +1,5 @@
+import { sql } from "@vercel/postgres";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -16,23 +18,22 @@ export default async function handler(req, res) {
       });
     }
 
-    console.log("LOCAL NEWS:", {
-      name,
-      location,
-      news
-    });
+    await sql`
+      INSERT INTO local_news (name, location, news)
+      VALUES (${name}, ${location}, ${news})
+    `;
 
     return res.status(200).json({
       success: true,
-      message: "Local news received successfully."
+      message: "Local news submitted successfully."
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("LOCAL NEWS ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Server error."
+      message: "Could not save local news."
     });
   }
 }

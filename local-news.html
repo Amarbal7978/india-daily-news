@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Submit Local News - India Daily News</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #123b70;
+    }
+
+    header {
+      background: #123b70;
+      color: white;
+      padding: 18px 30px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .title-box {
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .title-box h2 {
+      margin-top: 0;
+      font-size: 32px;
+    }
+
+    .title-box p {
+      font-size: 17px;
+    }
+
+    .verification-banner {
+      background: #fff4f4;
+      border: 1px solid #ffb5b5;
+      color: #a30000;
+      padding: 18px;
+      border-radius: 12px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 25px;
+    }
+
+    .form-card,
+    .side-card {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .step {
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 25px;
+      margin-bottom: 25px;
+    }
+
+    .step:last-child {
+      border-bottom: none;
+    }
+
+    .step h3 {
+      margin-top: 0;
+      font-size: 21px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 12px 0 6px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 15px;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    button {
+      border: none;
+      border-radius: 9px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .red-btn {
+      background: #dc2626;
+      color: white;
+    }
+
+    .blue-btn {
+      background: #123b70;
+      color: white;
+    }
+
+    .green-btn {
+      background: #16803c;
+      color: white;
+    }
+
+    .otp-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .media-box {
+      border: 2px dashed #94a3b8;
+      padding: 30px;
+      text-align: center;
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+
+    .media-box input {
+      border: none;
+      background: transparent;
+    }
+
+    .ai-check {
+      margin-top: 15px;
+      padding: 16px;
+      background: #eff6ff;
+      border-radius: 12px;
+      border-left: 5px solid #2563eb;
+    }
+
+    .ai-status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .declaration {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-top: 15px;
+    }
+
+    .declaration input {
+      width: auto;
+      margin-top: 4px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 20px;
+      background: #dc2626;
+      color: white;
+      font-size: 17px;
+      padding: 15px;
+    }
+
+    .side-card h3 {
+      margin-top: 0;
+    }
+
+    .process {
+      padding: 14px;
+      background: #f8fafc;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .commitment {
+      background: #ecfdf5;
+      border: 1px solid #86efac;
+    }
+
+    .guidelines {
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+    }
+
+    .side-card ul {
+      padding-left: 20px;
+      line-height: 1.8;
+    }
+
+    .back-home {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #123b70;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    @media (max-width: 800px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+
+      .otp-row {
+        grid-template-columns: 1fr;
+      }
+
+      .title-box h2 {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🇮🇳 INDIA DAILY NEWS</h1>
+    <p>Your daily India information hub</p>
+  </header>
+
+  <div class="container">
+
+    <a href="index.html" class="back-home">⬅️ Back to Home</a>
+
+    <div class="title-box">
+
+      <h2>📍 Submit Local News</h2>
+
+      <p>
+        Be the voice of your village, city and community.
+        Help us bring genuine local stories to everyone.
+      </p>
+
+      <div class="verification-banner">
+        🛡️ Strict Verification System
+        <br>
+        Every submission will remain pending until it is reviewed.
+        Unverified news will not be published.
+      </div>
+
+    </div>
+
+    <div class="main-grid">
+
+      <!-- LEFT SIDE -->
+      <div>
+
+        <div class="form-card">
+
+          <!-- STEP 1 -->
+          <div class="step">
+
+            <h3>📱 1. Verify Your Mobile Number</h3>
+
+            <p>
+              Mobile verification helps prevent spam and fake submissions.
+            </p>
+
+            <div class="otp-row">
+
+              <div>
+                <label>Mobile Number *</label>
+                <input
+                  type="tel"
+                  id="mobile"
+                  placeholder="Enter 10 digit mobile number"
+                  maxlength="10"
+                >
+              </div>
+
+              <button
+                type="button"
+                class="red-btn"
+                onclick="sendOTP()">
+                Send OTP
+              </button>
+
+            </div>
+
+            <div class="otp-row">
+
+              <div>
+                <label>OTP *</label>
+                <input
+                  type="text"
+                  id="otp"
+                  placeholder="Enter OTP"
+                  maxlength="6"
+                >
+              </div>
+
+              <button
+                type="button"
+                class="blue-btn"
+                onclick="verifyOTP()">
+                Verify OTP
+              </button>
+
+            </div>
+
+            <p id="otpStatus"></p>
+
+          </div>
+
+
+          <!-- STEP 2 -->
+          <div class="step">
+
+            <h3>👤 2. Your Details</h3>
+
+            <p>
+              Your information helps our team verify the report.
+            </p>
+
+            <div class="two-column">
+
+              <div>
+                <label>Full Name *</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  placeholder="Enter your full name"
+                >
+              </div>
+
+              <div>
+                <label>Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email"
+                >
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- STEP 3 -->
+          <div class="step">
+
+            <h3>📍 3. Location Details</h3>
+
+            <div class="two-column">
+
+              <div>
+                <label>Village / Area *</label>
+                <input
+                  type="text"
+                  id="village"
+                  placeholder="Village or area"
+                >
+              </div>
+
+              <div>
+                <label>Block / Tehsil *</label>
+                <input
+                  type="text"
+                  id="block"
+                  placeholder="Block or tehsil"
+                >
+              </div>
+
+              <div>
+                <label>District *</label>
+                <input
+                  type="text"
+                  id="district"
+                  placeholder="District"
+                >
+              </div>
+
+              <div>
+                <label>State *</label>
+                <input
+                  type="text"
+                  id="state"
+                  placeholder="State"
+                >
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- STEP 4 -->
+          <div class="step">
+
+            <h3>📰 4. News Details</h3>
+
+            <label>News Title *</label>
+
+            <input
+              type="text"
+              id="newsTitle"
+              placeholder="Write a short news title"
+            >
+
+            <label>Category *</label>
+
+            <select id="category">
+
+              <option value="">Select category</option>
+              <option>Village News</option>
+              <option>Education</option>
+              <option>Government</option>
+              <option>Public Service</option>
+              <option>Health</option>
+              <option>Environment</option>
+              <option>Events</option>
+              <option>Other</option>
+
+            </select>
+
+            <label>Event Date & Time *</label>
+
+            <input
+              type="datetime-local"
+              id="eventDate"
+            >
+
+            <label>Full News Description *</label>
+
+            <textarea
+              id="newsDescription"
+              placeholder="What happened? Where? When? Who was involved?"
+            ></textarea>
+
+          </div>
+
+
+          <!-- STEP 5 -->
+          <div class="step">
+
+            <h3>📷 5. Upload Photo / Video Evidence</h3>
+
+            <p>
+              Original photo or video evidence is required for verification.
+            </p>
+
+            <div class="media-box">
+
+              <p>📤 Upload Photo / Video</p>
+
+              <input
+                type="file"
+                id="mediaFile"
+                accept="image/*,video/*"
+              >
+
+              <p>
+                Supported: JPG, PNG, WEBP, MP4, MOV
+              </p>
+
+            </div>
+
+            <div class="ai-check">
+
+              🤖 <strong>Media Verification</strong>
+
+              <p>
+                Uploaded media will be checked before publication.
+              </p>
+
+              <ul>
+                <li>Possible AI-generated media detection</li>
+                <li>Duplicate media check</li>
+                <li>Basic metadata review</li>
+                <li>Possible manipulation indicators</li>
+              </ul>
+
+              <div id="aiStatus" class="ai-status">
+                ⏳ Media verification pending
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- STEP 6 -->
+          <div class="step">
+
+            <h3>🛡️ 6. Declaration</h3>
+
+            <div class="declaration">
+
+              <input
+                type="checkbox"
+                id="declaration"
+              >
+
+              <label for="declaration">
+                I confirm that the information provided by me is
+                accurate to the best of my knowledge. I understand
+                that my submission will be reviewed before publication.
+              </label>
+
+            </div>
+
+            <button
+              type="button"
+              class="submit-btn"
+              onclick="submitLocalNews()">
+
+              🔍 Submit for Verification
+
+            </button>
+
+            <p id="submitStatus"></p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- RIGHT SIDE -->
+      <div>
+
+        <div class="side-card">
+
+          <h3>⚙️ How It Works</h3>
+
+          <div class="process">
+            <strong>1️⃣ Submit</strong>
+            <p>
+              Provide correct details and evidence.
+            </p>
+          </div>
+
+          <div class="process">
+            <strong>2️⃣ Verification</strong>
+            <p>
+              Our verification process checks the report
+              and evidence.
+            </p>
+          </div>
+
+          <div class="process">
+            <strong>3️⃣ Review</strong>
+            <p>
+              News remains pending until approved.
+            </p>
+          </div>
+
+          <div class="process">
+            <strong>4️⃣ Publish</strong>
+            <p>
+              Only approved reports can be published.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="side-card commitment">
+
+          <h3>🛡️ Our Commitment</h3>
+
+          <ul>
+            <li>Unverified news will not be published</li>
+            <li>Multiple verification steps</li>
+            <li>Evidence-based review</li>
+            <li>Submitter information protected</li>
+            <li>Rejected reports remain unpublished</li>
+          </ul>
+
+        </div>
+
+
+        <div class="side-card guidelines">
+
+          <h3>⚠️ Important Guidelines</h3>
+
+          <ul>
+            <li>Do not submit fake or misleading information</li>
+            <li>Upload genuine photos/videos</li>
+            <li>Give accurate location and date</li>
+            <li>Do not submit old unrelated media</li>
+            <li>Do not submit harmful or illegal content</li>
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    let otpVerified = false;
+
+    function sendOTP() {
+
+      const mobile = document.getElementById("mobile").value.trim();
+
+      if (!/^[0-9]{10}$/.test(mobile)) {
+
+        document.getElementById("otpStatus").innerText =
+          "❌ Please enter a valid 10 digit mobile number.";
+
+        return;
+      }
+
+      document.getElementById("otpStatus").innerText =
+        "📱 OTP system will be connected to SMS service.";
+
+    }
+
+
+    function verifyOTP() {
+
+      const otp = document.getElementById("otp").value.trim();
+
+      if (otp.length !== 6) {
+
+        document.getElementById("otpStatus").innerText =
+          "❌ Enter the 6 digit OTP.";
+
+        return;
+      }
+
+      /*
+        Real OTP verification will be connected
+        through a secure backend/SMS provider.
+      */
+
+      document.getElementById("otpStatus").innerText =
+        "⚠️ Real OTP verification is required before publication.";
+
+    }
+
+
+    document
+      .getElementById("mediaFile")
+      .addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (!file) return;
+
+        document.getElementById("aiStatus").innerText =
+          "🔍 Media received. Authenticity/AI checks pending.";
+
+      });
+
+
+    async function submitLocalNews() {
+
+      const declaration =
+        document.getElementById("declaration").checked;
+
+      if (!declaration) {
+
+        alert("Please accept the declaration.");
+
+        return;
+      }
+
+      const file =
+        document.getElementById("mediaFile").files[0];
+
+      if (!file) {
+
+        alert("Please upload a photo or video as evidence.");
+
+        return;
+      }
+
+      /*
+        Important:
+        This frontend does NOT claim that the media is
+        definitely real. Actual AI/media verification
+        must happen on the server before publication.
+      */
+
+      document.getElementById("submitStatus").innerText =
+        "🟡 Submission received for verification. It will NOT be published automatically.";
+
+    }
+
+  </script>
+
+</body>
+</html>
