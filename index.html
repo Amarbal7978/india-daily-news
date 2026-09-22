@@ -303,6 +303,88 @@ body.dark-mode a {
     display: flex;
   }
 }
+/* Local News Section */
+#localNewsSection {
+  margin-top: 30px;
+}
+
+.local-news-box {
+  max-width: 750px;
+  margin: 25px auto;
+  padding: 25px;
+  background: #f8fbff;
+  border-radius: 18px;
+  border: 1px solid #d7e3f2;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.local-news-box input,
+.local-news-box textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  padding: 14px;
+  border: 1px solid #cbd8e8;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.local-news-box textarea {
+  resize: vertical;
+}
+
+.local-news-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.local-news-buttons button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#voiceNewsBtn {
+  background: #123b70;
+  color: white;
+}
+
+#sendLocalNewsBtn {
+  background: #16803c;
+  color: white;
+}
+
+body.dark-mode .local-news-box {
+  background: #1e1e1e;
+  border-color: #444;
+}
+
+body.dark-mode .local-news-box input,
+body.dark-mode .local-news-box textarea {
+  background: #2a2a2a;
+  color: white;
+  border-color: #555;
+}
+
+@media (max-width: 600px) {
+  .local-news-box {
+    margin: 20px 10px;
+    padding: 18px;
+  }
+
+  .local-news-buttons {
+    flex-direction: column;
+  }
+
+  .local-news-buttons button {
+    width: 100%;
+  }
+}
   </style>
 </head>
 
@@ -500,7 +582,40 @@ body.dark-mode a {
         </article>
       </div>
     </section>
+<section class="section" id="localNewsSection">
+  <h2>📢 Send Your Local News</h2>
+  <p>Apne gaon, mohalla ya city ki important news hum tak bhejein.</p>
 
+  <div class="local-news-box">
+    <input
+      type="text"
+      id="localNewsName"
+      placeholder="Aapka naam"
+    >
+
+    <input
+      type="text"
+      id="localNewsLocation"
+      placeholder="Village / City / State"
+    >
+
+    <textarea
+      id="localNewsText"
+      rows="5"
+      placeholder="Apni local news yahan likhein..."
+    ></textarea>
+
+    <div class="local-news-buttons">
+      <button type="button" id="voiceNewsBtn">
+        🎙️ Bolkar News Likhein
+      </button>
+
+      <button type="button" id="sendLocalNewsBtn">
+        📤 Send News
+      </button>
+    </div>
+  </div>
+</section>
     </main>
 <section class="section">
   <h2>About India Daily News</h2>
@@ -871,6 +986,93 @@ function toggleMenu() {
   const navbar = document.querySelector(".navbar");
   navbar.classList.toggle("show");
 }
+const voiceNewsBtn = document.getElementById("voiceNewsBtn");
+const localNewsText = document.getElementById("localNewsText");
+
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "hi-IN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  voiceNewsBtn.addEventListener("click", () => {
+    recognition.start();
+    voiceNewsBtn.innerHTML = "🎙️ Sun raha hoon...";
+  });
+
+  recognition.onresult = (event) => {
+    const spokenText = event.results[0][0].transcript;
+
+    localNewsText.value =
+      localNewsText.value +
+      (localNewsText.value ? " " : "") +
+      spokenText;
+
+    voiceNewsBtn.innerHTML = "🎙️ Bolkar News Likhein";
+  };
+
+  recognition.onerror = () => {
+    voiceNewsBtn.innerHTML = "🎙️ Bolkar News Likhein";
+    alert("Voice input nahi ho paya. Mic permission check karein.");
+  };
+
+  recognition.onend = () => {
+    voiceNewsBtn.innerHTML = "🎙️ Bolkar News Likhein";
+  };
+} else {
+  voiceNewsBtn.disabled = true;
+  voiceNewsBtn.innerHTML = "🎙️ Voice Not Supported";
+}
+const sendLocalNewsBtn = document.getElementById("sendLocalNewsBtn");
+
+sendLocalNewsBtn.addEventListener("click", async () => {
+  const name = document.getElementById("localNewsName").value.trim();
+  const location = document.getElementById("localNewsLocation").value.trim();
+  const news = document.getElementById("localNewsText").value.trim();
+
+  if (!name || !location || !news) {
+    alert("Please fill Name, Location and News.");
+    return;
+  }
+
+  sendLocalNewsBtn.disabled = true;
+  sendLocalNewsBtn.innerText = "📤 Sending...";
+
+  try {
+    const response = await fetch("/api/local-news", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        location,
+        news
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert("✅ Your local news has been submitted!");
+      document.getElementById("localNewsName").value = "";
+      document.getElementById("localNewsLocation").value = "";
+      document.getElementById("localNewsText").value = "";
+    } else {
+      alert("❌ " + data.message);
+    }
+
+  } catch (error) {
+    alert("❌ News submit nahi ho payi. Please try again.");
+  }
+
+  sendLocalNewsBtn.disabled = false;
+  sendLocalNewsBtn.innerText = "📤 Send News";
+});
   </script>
 
 </body>
