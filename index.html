@@ -272,6 +272,37 @@ body.dark-mode a {
   color: white;
   font-weight: bold;
 }
+#menuBtn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 10000;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #123b70;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  #menuBtn {
+    display: block;
+  }
+
+  .navbar {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 60px 20px 20px;
+  }
+
+  .navbar.show {
+    display: flex;
+  }
+}
   </style>
 </head>
 
@@ -280,6 +311,7 @@ body.dark-mode a {
   🌙 Dark Mode
 </button>
   <header>
+    <button id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
   <nav class="navbar">
   <a href="#homeSection">Home</a>
   <a href="#categoriesSection">Categories</a>
@@ -834,6 +866,10 @@ function toggleDarkMode() {
   } else {
     button.innerHTML = "🌙 Dark Mode";
   }
+}
+function toggleMenu() {
+  const navbar = document.querySelector(".navbar");
+  navbar.classList.toggle("show");
 }
   </script>
 
