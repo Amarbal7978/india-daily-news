@@ -215,82 +215,16 @@
     </div>
 
 
-    <!-- Pending News -->
+<!-- Local News Submissions -->
 
-    <div class="news-card">
+<div id="submissionsContainer">
 
-      <div class="news-header">
+  <div class="news-card">
+    <h2>📰 Local News Submissions</h2>
+    <p>Loading submissions...</p>
+  </div>
 
-        <div>
-          <h2>📰 Local News Submissions</h2>
-          <p>Review every report before publication.</p>
-        </div>
-
-        <span class="status pending">
-          PENDING REVIEW
-        </span>
-
-      </div>
-
-      <h3>
-        Sample Local News Submission
-      </h3>
-
-      <div class="details">
-
-        <div class="detail">
-          👤 <strong>Submitter:</strong>
-          Demo User
-        </div>
-
-        <div class="detail">
-          📱 <strong>Mobile:</strong>
-          Verified
-        </div>
-
-        <div class="detail">
-          📍 <strong>Location:</strong>
-          Village / District / State
-        </div>
-
-        <div class="detail">
-          🕐 <strong>Event:</strong>
-          Date & Time
-        </div>
-
-      </div>
-
-      <div class="evidence">
-
-        <strong>📷 Evidence</strong>
-
-        <p>
-          Photo / video submitted by the user.
-        </p>
-
-        <p>
-          🤖 AI/media authenticity check:
-          <strong>Pending</strong>
-        </p>
-
-      </div>
-
-      <div class="actions">
-
-        <button class="review-btn">
-          🔍 Review Evidence
-        </button>
-
-        <button class="verify-btn">
-          🟢 Verify & Publish
-        </button>
-
-        <button class="reject-btn">
-          🔴 Reject
-        </button>
-
-      </div>
-
+</div>
     </div>
 
 
@@ -316,9 +250,43 @@
 
 
   <script>
+async function checkAdminLogin() {
 
-    async function loadLocalNews() {
   try {
+
+    const response =
+      await fetch("../api/admin-auth");
+
+    const data =
+      await response.json();
+
+    if (!data.success || !data.authenticated) {
+
+      window.location.href =
+        "login.html";
+
+      return false;
+    }
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Admin authentication error:",
+      error
+    );
+
+    window.location.href =
+      "login.html";
+
+    return false;
+  }
+}
+async function loadLocalNews() {
+
+  try {
+
     const response = await fetch("../api/local-news");
 
     const data = await response.json();
@@ -329,6 +297,7 @@
 
     const submissions = data.submissions || [];
 
+    // Statistics
     document.getElementById("pendingCount").innerText =
       submissions.filter(item => item.status === "pending").length;
 
@@ -341,14 +310,248 @@
     document.getElementById("totalCount").innerText =
       submissions.length;
 
-    console.log("Local News:", submissions);
+
+    // Submissions
+    const container =
+      document.getElementById("submissionsContainer");
+
+    if (submissions.length === 0) {
+
+      container.innerHTML = `
+        <div class="news-card">
+          <h2>📰 Local News Submissions</h2>
+          <p>No submissions found.</p>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    container.innerHTML = submissions.map(item => {
+
+      const statusClass =
+        item.status === "verified"
+          ? "verified"
+          : item.status === "rejected"
+          ? "rejected"
+          : "pending";
+
+      return `
+        <div class="news-card">
+
+          <div class="news-header">
+
+            <div>
+              <h2>📰 Local News Report #${item.id}</h2>
+
+              <p>
+                Submitted:
+                ${new Date(item.created_at).toLocaleString()}
+              </p>
+            </div>
+
+            <span class="status ${statusClass}">
+              ${item.status.toUpperCase()}
+            </span>
+
+          </div>
+
+
+          <div class="details">
+
+            <div class="detail">
+              👤 <strong>Submitter:</strong>
+              ${item.name}
+            </div>
+
+            <div class="detail">
+              📍 <strong>Location:</strong>
+              ${item.location}
+            </div>
+
+          </div>
+
+
+          <div class="evidence">
+
+            <strong>📰 News Report</strong>
+
+            <p style="white-space: pre-line;">
+              ${item.news}
+            </p>
+
+            <p>
+              🤖 AI/media authenticity check:
+              <strong>Pending</strong>
+            </p>
+
+          </div>
+
+
+          <div class="actions">
+
+            <button
+              class="review-btn"
+              onclick="reviewSubmission(${item.id})">
+              🔍 Review
+            </button>
+
+            ${
+              item.status === "pending"
+                ? `
+                  <button
+                    class="verify-btn"
+                    onclick="verifySubmission(${item.id})">
+                    🟢 Verify & Publish
+                  </button>
+
+                  <button
+                    class="reject-btn"
+                    onclick="rejectSubmission(${item.id})">
+                    🔴 Reject
+                  </button>
+                `
+                : ""
+            }
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
 
   } catch (error) {
+
     console.error("Dashboard error:", error);
+
+    document.getElementById("submissionsContainer").innerHTML = `
+      <div class="news-card">
+        <h2>❌ Error</h2>
+        <p>Could not load local news submissions.</p>
+      </div>
+    `;
   }
 }
 
-loadLocalNews();
+
+function reviewSubmission(id) {
+
+  alert(
+    "Review system for submission #" +
+    id +
+    " will be connected next."
+  );
+
+}
+
+
+async function verifySubmission(id) {
+
+  const confirmed = confirm(
+    "Are you sure you want to verify this news?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+
+    const response = await fetch("../api/local-news", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id,
+        action: "verify",
+        admin: "admin"
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.message || "Verification failed"
+      );
+    }
+
+    alert("✅ News verified successfully.");
+
+    loadLocalNews();
+
+  } catch (error) {
+
+    console.error("Verify error:", error);
+
+    alert(
+      "❌ Verification failed: " +
+      error.message
+    );
+  }
+}
+
+
+async function rejectSubmission(id) {
+
+  const reason = prompt(
+    "Why are you rejecting this news?"
+  );
+
+  if (!reason || !reason.trim()) {
+    alert("❌ Rejection reason is required.");
+    return;
+  }
+
+  try {
+
+    const response = await fetch("../api/local-news", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: id,
+        action: "reject",
+        admin: "admin",
+        rejection_reason: reason.trim(),
+        verification_notes: "Rejected after admin review."
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.message || "Rejection failed"
+      );
+    }
+
+    alert("🔴 News rejected successfully.");
+
+    loadLocalNews();
+
+  } catch (error) {
+
+    console.error("Reject error:", error);
+
+    alert(
+      "❌ Rejection failed: " +
+      error.message
+    );
+  }
+}
+
+
+checkAdminLogin().then(authenticated => {
+
+  if (authenticated) {
+    loadLocalNews();
+  }
+
+});
 </script>
 </body>
 </html>
